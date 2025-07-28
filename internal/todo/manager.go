@@ -23,7 +23,7 @@ var FilterConditionsMap = map[TaskStateFilter]func(Task) bool{
 
 func Add(tasks []Task, desc string) []Task {
 	return append(tasks, Task{
-		Id:          len(tasks),
+		ID:          len(tasks),
 		Description: desc,
 		Done:        false,
 	})

@@ -30,7 +30,7 @@ func LoadJSON(path string) ([]todo.Task, error) {
 		logging.Logger.Error("Error unmarshalling the json storage file", "error", err.Error(), "file", path)
 		return tasks, fmt.Errorf("failed to parse json: %w", err)
 	}
-	logging.Logger.Info("Loaded tasks from json", "amount", len(tasks))
+	logging.Logger.Debug("Loaded tasks from json", "amount", len(tasks))
 	return tasks, nil
 }
 
@@ -44,6 +44,6 @@ func SaveJSON(path string, tasks []todo.Task) error {
 		logging.Logger.Error("Failed writing to file", "error", err.Error(), "tasks", tasks, "path", path)
 		return fmt.Errorf("failed to write to json storage: %w", err)
 	}
-	logging.Logger.Info("Save tasks to json", "amount", len(tasks))
+	logging.Logger.Debug("Save tasks to json", "amount", len(tasks))
 	return nil
 }

@@ -48,12 +48,12 @@ func LoadCSV(path string) ([]todo.Task, error) {
 			return []todo.Task{}, fmt.Errorf("invalid Done format: %v", row[2])
 		}
 		tasks = append(tasks, todo.Task{
-			Id:          convertedId,
+			ID:          convertedId,
 			Description: row[1],
 			Done:        convertedDone,
 		})
 	}
-	logging.Logger.Info("Loaded tasks from csv", "amount", len(tasks))
+	logging.Logger.Debug("Loaded tasks from csv", "amount", len(tasks))
 	return tasks, nil
 }
 
@@ -75,12 +75,12 @@ func SaveCSV(path string, tasks []todo.Task) error {
 		return fmt.Errorf("failed to write headers to csv: %w", err)
 	}
 	for _, task := range tasks {
-		serializedRow := []string{strconv.Itoa(task.Id), task.Description, strconv.FormatBool(task.Done)}
+		serializedRow := []string{strconv.Itoa(task.ID), task.Description, strconv.FormatBool(task.Done)}
 		if err := writer.Write(serializedRow); err != nil {
 			logging.Logger.Error("Error writing a row", "error", err.Error(), "task", task)
 			return fmt.Errorf("failed to write a row to csv: %w", err)
 		}
 	}
-	logging.Logger.Info("Save tasks to csv", "amount", len(tasks))
+	logging.Logger.Debug("Save tasks to csv", "amount", len(tasks))
 	return nil
 }
