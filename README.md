@@ -47,6 +47,10 @@ export LOG_LEVEL=DEBUG
 ## Requirements
 Go 1.21 or later
 
+## Testing
+```bash
+go test ./...
+```
 
 ## Examples
 

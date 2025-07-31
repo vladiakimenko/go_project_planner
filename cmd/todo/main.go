@@ -35,7 +35,7 @@ func main() {
 	if command != LoadCmd {
 		result, err := storage.LoadJSON(JsonStoragePath)
 		if err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 		tasks = result
 	}
@@ -45,7 +45,7 @@ func main() {
 		flagSet := flag.NewFlagSet(AddCmd, flag.ExitOnError)
 		desc := flagSet.String("desc", "", "Task description")
 		if err := flagSet.Parse(args); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 		if *desc == "" {
 			log.Fatal("description is required")
@@ -53,7 +53,7 @@ func main() {
 		updatedTasks := todo.Add(tasks, *desc)
 		fmt.Printf("Successfully added:\n%v\n", updatedTasks[len(updatedTasks)-1])
 		if err := storage.SaveJSON(JsonStoragePath, updatedTasks); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 	case ListCmd:
 		flagSet := flag.NewFlagSet(ListCmd, flag.ExitOnError)
@@ -62,7 +62,7 @@ func main() {
 			fmt.Sprintf("One of: %s, %s, %s", todo.FilterAll, todo.FilterDone, todo.FilterPending),
 		)
 		if err := flagSet.Parse(args); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 		if !slices.Contains([]string{string(todo.FilterAll), string(todo.FilterDone), string(todo.FilterPending)}, *filter) {
 			log.Fatalf("Invalid filter value: %s", *filter)
@@ -75,40 +75,40 @@ func main() {
 		flagSet := flag.NewFlagSet(CompleteCmd, flag.ExitOnError)
 		id := flagSet.Int("id", -1, "Task id")
 		if err := flagSet.Parse(args); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 		if *id == -1 {
 			log.Fatal("id is required")
 		}
 		updatedTasks, err := todo.Complete(tasks, *id)
 		if err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 		if err := storage.SaveJSON(JsonStoragePath, updatedTasks); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 	case DeleteCmd:
 		flagSet := flag.NewFlagSet(DeleteCmd, flag.ExitOnError)
 		id := flagSet.Int("id", -1, "Task id")
 		if err := flagSet.Parse(args); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 		if *id == -1 {
 			log.Fatal("id is required")
 		}
 		updatedTasks, err := todo.Delete(tasks, *id)
 		if err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 		if err := storage.SaveJSON(JsonStoragePath, updatedTasks); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 	case ExportCmd:
 		flagSet := flag.NewFlagSet(ExportCmd, flag.ExitOnError)
 		format := flagSet.String("format", "", "Output format: json or csv")
 		out := flagSet.String("out", "", "Output filepath")
 		if err := flagSet.Parse(args); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 		if *format == "" || *out == "" {
 			log.Fatal("both format and out flags are required")
@@ -123,13 +123,13 @@ func main() {
 			log.Fatalf("incorrect format value provided: %s", *format)
 		}
 		if err := action(*out, tasks); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 	case LoadCmd:
 		flagSet := flag.NewFlagSet(LoadCmd, flag.ExitOnError)
 		file := flagSet.String("file", "", "Filepath to import")
 		if err := flagSet.Parse(args); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 		var action func(string) ([]todo.Task, error)
 		switch filepath.Ext(*file) {
@@ -142,10 +142,10 @@ func main() {
 		}
 		updatedTasks, err := action(*file)
 		if err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 		if err := storage.SaveJSON(JsonStoragePath, updatedTasks); err != nil {
-			log.Fatal(err.Error())
+			log.Fatal(err)
 		}
 	}
 	fmt.Println("done")

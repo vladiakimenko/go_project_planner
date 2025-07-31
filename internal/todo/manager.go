@@ -31,8 +31,12 @@ func Add(tasks []Task, desc string) []Task {
 func List(tasks []Task, filter string) []Task {
 	result := []Task{}
 	filterType := TaskStateFilter(filter)
+	filterFunc, ok := FilterConditionsMap[filterType]
+	if !ok {
+		filterFunc = FilterConditionsMap[FilterAll]
+	}
 	for _, item := range tasks {
-		if FilterConditionsMap[filterType](item) {
+		if filterFunc(item) {
 			result = append(result, item)
 		}
 	}
